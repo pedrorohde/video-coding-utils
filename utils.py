@@ -39,8 +39,8 @@ def crop_image(image, pos, size):
     Output:
         cropped image as np.array
     """
-    assert image.shape[0] >= pos[0]+size[0]
-    assert image.shape[1] >= pos[1]+size[1]
+    assert pos[0]+size[0] <= image.shape[0]
+    assert pos[1]+size[1] <= image.shape[1]
     return image[pos[0]:pos[0]+size[0], pos[1]:pos[1]+size[1], :]
 
 
@@ -55,14 +55,32 @@ def n_random_crops(image, n, size):
     Output:
         cropped patches as np.array with shape (n, rows, cols, channels)
     """
-    assert size[0] <= image.shape[0]
-    assert size[1] <= image.shape[1]
-    crops = np.empty((n,*size, image.shape[-1]))
+    assert size[0] <= image.shape[0], "patch height should be <= image height"
+    assert size[1] <= image.shape[1], "patch width should be <= image width"
+    crops = np.empty((n, *size, image.shape[-1]))
     for i in range(n):
-        pos = (random.randint(0, image.shape[0]-size[0]+1), random.randint(0, image.shape[1]-size[1]+1))
+        pos = (random.randint(0, image.shape[0]-size[0]), random.randint(0, image.shape[1]-size[1]))
         crop = crop_image(image, pos, size)
         crops[i,:,:,:] = crop
     return crops
+
+
+def random_crops_from_dir(path, n, size):
+    """
+    Take n random crops from each image of a directory.
+
+    Input:
+        path: string with directory path
+        n: number of random crops to take
+        size: size of the patches (rows, cols)
+    """
+    filelist = list_files(path, 'png')
+    data = np.empty((0, *size, 3))
+    for f in filelist:
+        img = read_image(f)
+        data = np.concatenate((data, n_random_crops(img, n, size)),axis=0)
+    return data
+
 
 def np_to_pil(array):
     """
