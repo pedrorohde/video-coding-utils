@@ -104,14 +104,14 @@ def read_YUV420(path, size, frame=0, channel='Y'):
         pos += size[0]*size[1]*5//4
         size = (size[0]//2, size[1]//2)
     
-    with open(filepath, 'rb') as f:
+    with open(path, 'rb') as f:
         f.seek(pos, 0)
         img = Image.frombytes('L', [size[1], size[0]], f.read(size[1]*size[0]))
     
     return np.asarray(img)/255.
 
 
-def read_YUV420_multiframes(filepath, size, frames, channel='Y'):
+def read_YUV420_multiframes(path, size, frames, channel='Y'):
     """
     Read binary YUV420 raw video file and return multiple frames.
 
@@ -133,13 +133,13 @@ def read_YUV420_multiframes(filepath, size, frames, channel='Y'):
     
     data = np.empty((len(frames), *size))
     
-    with open(filepath, 'rb') as f:
+    with open(path, 'rb') as f:
         for i in range(len(pos)):
             p = pos[i]
             f.seek(p, 0)
             img = Image.frombytes('L', [size[1], size[0]], f.read(size[1]*size[0]))
             data[i,:,:] = np.asarray(img)/255.
-             
+              
     return data
 
 
