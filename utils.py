@@ -65,6 +65,39 @@ def n_random_crops(image, n, size):
     return crops
 
 
+# def n_random_slices(n, image_shape, size):
+#     # return [(random.randint(0, image.shape[0]-size[0]), random.randint(0, image.shape[1]-size[1])) for i in range(n)]
+#     # return np.hstack([np.random.randint(0, shape[i]-size[i], (n,1)) for i in range(2)])
+
+#     r = np.random.randint(0, image_shape[0]-size[0], (n,))
+#     x = [slice(r[i],r[i]+size[0]) for i in range(n)]
+
+#     r = np.random.randint(0, image_shape[1]-size[1], (n,))
+#     y = [slice(r[i],r[i]+size[1]) for i in range(n)]
+
+#     return np.stack([x,y]).T
+
+
+def n_random_slices(n, frames, frame_size, slice_size):
+    # return [(random.randint(0, image.shape[0]-size[0]), random.randint(0, image.shape[1]-size[1])) for i in range(n)]
+    # return np.hstack([np.random.randint(0, shape[i]-size[i], (n,1)) for i in range(2)])
+
+    r = np.random.randint(0, frame_size[0]-slice_size[0], (n,))
+    x = [slice(r[i],r[i]+slice_size[0]) for i in range(n)]
+
+    r = np.random.randint(0, frame_size[1]-slice_size[1], (n,))
+    y = [slice(r[i],r[i]+slice_size[1]) for i in range(n)]
+
+    S = np.stack([x,y])
+
+    return [np.s_[frames, S[0,i], S[1,i]] for i in range(n)]
+
+
+def patches_from_idxs(video_array, idxs):
+    return np.concatenate([video_array[i] for i in idxs])
+
+
+
 def random_crops_from_dir(path, n, size):
     """
     Take n random crops from each image of a directory.
