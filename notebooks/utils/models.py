@@ -22,11 +22,11 @@ class ARCNN(Model):
 class QECNN_I(Model):
     def __init__(self):
         super(QECNN_I, self).__init__()
-        self.conv1 = Conv2D(128, 9)
-        self.conv2 = Conv2D(64, 7)
-        self.conv3 = Conv2D(64, 3)
-        self.conv4 = Conv2D(32, 1)
-        self.conv5 = Conv2D(1, 5)
+        self.conv1 = Conv2D(128, 9, padding='same')
+        self.conv2 = Conv2D(64, 7, padding='same')
+        self.conv3 = Conv2D(64, 3, padding='same')
+        self.conv4 = Conv2D(32, 1, padding='same')
+        self.conv5 = Conv2D(1, 5, padding='same')
         self.prelu1 = PReLU()
         self.prelu2 = PReLU()
         self.prelu3 = PReLU()
