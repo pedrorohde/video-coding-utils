@@ -1,2 +1,2 @@
-model_checkpoint_path: "ARCNN"
-all_model_checkpoint_paths: "ARCNN"
+model_checkpoint_path: "QECNN_I"
+all_model_checkpoint_paths: "QECNN_I"
